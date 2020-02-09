@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { isNumber } from 'util';
 
 @Component({
   selector: 'app-tab1',
@@ -7,87 +8,60 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() {}
- /* initialisation des varariables */
-
-display = 0;
-memory = 0;
-state = 'number';
-operator = '+';
-decimal = false;
-decimals = 0;
-
-/* la function clickNumber  prends en paramettre un nombre n */
-
-clickNumber(n: number) {
-  switch (this.state) { 
-    /*
-     pour chaque nombre : on vérifie si c'est un nombre decimal .
-       si oui on incrémente decimals et on retourne display + le nombre * la puissance
-       dont la base est 10 et l'exposant est le décimal incrémenté.  
-       sinon on retourne display * 10 +le nombre
-     */   
-    case 'number':
-      if (this.decimal) { 
-        this.decimals++;
-        this.display = this.display + n * Math.pow(10, -this.decimals);
-      } else {
-        this.display = this.display * 10 + n;
-      }
-      break;
-      /*
-      pour les operateur ,display prend le nombre
-      */
-    case 'operator':
-      this.display = n;
-      this.state = 'number';
-      break;
-      /*
-      pour l' operateur =
-      */
-    case 'result':
-      this.memory = 0;
-      this.display = n;
-      this.state = 'number';
+ /* declaration des varariables */
+   display = '0'; /* la varibale de l'ecran de calculatrice */
+   oldValue = '0'; /* declaration des varariables */
+   lastOperator = 'x'; /* declaration des varariables */
+   newEntry = true; /* la variable verifie si on peut entrer une nouvelle operande */
+   Matrice = [ /* Tableau contenant l'ensemble des symboles de ma calculatrice */
+                ['AC', '+/-', '%', '/'],
+                [7, 8, 9, 'x'],
+                [4, 5, 6, '-'],
+                [1, 2, 3, '+'],
+                [0, ' ', ',', '=']
+              ];
+/* la fonction calculatrice prends en parametre le symbole appuyé ;
+*  teste si le symbole saisi est un entier ;dans ce si cest l'insertion d'une nouvelle operande
+* il remplace display par sa valeur; sinon il concatene a l'ancienne valeur de display
+* suivant le bouton AC ou +/- il fait l'action sur l'operande
+* quand  j'appuie sur un operateur different de AC ,+/- et = , il met display dans la variable oldValue 
+* et permet la saisie d'une nouvelle operande.Il met l'operateur dans lastOperateur
+* A la saisie de = il effectue l'operation qui a lieu;
+*/ 
+  fonctionCalculatrice(symbole) {
+   if (isNumber(symbole)) {
+        if (this.newEntry) {
+          this.display = '' + symbole;
+        } else {
+          this.display += '' + symbole;
+        }
+        this.newEntry = false;
+    } else if (symbole === '+/-') {
+        this.display = '' + (parseFloat(this.display ) * -1);
+        this.newEntry = false;
+    } else if (symbole === ',') {
+      this.display = '' + parseFloat(this.display ) + '.';
+      this.newEntry = false;
+  } else if (symbole === 'AC') {
+        this.display = '0';
+        this.newEntry = true;
+    } else if (symbole === '=') {
+        if (this.lastOperator === 'x') { 
+          this.display = '' + (parseFloat(this.oldValue) * parseFloat(this.display ));
+         }  else if (this.lastOperator === '-') {
+          this.display = '' + (parseFloat(this.oldValue) - parseFloat(this.display));
+         } else if (this.lastOperator === '/') {
+          this.display = '' + (parseFloat(this.oldValue) / parseFloat(this.display));
+         } else if (this.lastOperator === '+') {
+          this.display = '' + (parseFloat(this.oldValue) + parseFloat(this.display));
+         } else if (this.lastOperator === '%') {
+          this.display = '' + (parseFloat(this.oldValue) % parseFloat(this.display));
+         }
+        this.newEntry = true;
+    } else { // operator
+        this.newEntry = true;
+        this.oldValue = this.display;
+        this.lastOperator = symbole;
+    }
   }
-}
-
-// Effectue cette operation au click
-clickOperator(o: string) {
- 
-  this.calculate();
-  this.operator = o;
-  this.memory = this.display;
-  this.state = 'operator';
-
-}
-
-// fais le calcul suivant l'operateur et les enregistrement dans la memoire
-calculate() {
-  this.display = eval('' + this.memory + this.operator + '(' + this.display + ')');
-  this.memory = 0;
-  this.state = 'result';
-  this.operator = '+';
-  this.decimal = false;
-  this.decimals = 0;
- 
-}
-// reinitialisation des variables
-reset() {
-  this.display = 0;
-  this.memory = 0;
-  this.state = 'number';
-  this.operator = '+';
-  this.decimal = false;
-  this.decimals = 0;
-}
-// signe contraire de display
-changeSign() {
-  this.display = this.display * -1;
-}
-
-// modification en decimal
-setDecimal() {
-  this.decimal = true;
-}
 }

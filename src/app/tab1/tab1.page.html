@@ -6,203 +6,23 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
-<!-- le contenu de la page -->
-<ion-content color="black" >
- <!-- l'ecran de la Calculatrice -->
-    <ion-row>
-      <ion-col size="12" >
-        <ion-label class="display">
-          {{ display | number : '.0-8'}}
-        </ion-label>
-      </ion-col>
-    </ion-row>
-  <!-- la première ligne de la calculatrice-->
-    <ion-row>
-    <!-- le bouton AC qui permet de réinitialiser la calculette-->
-      <ion-col size="3">
-        <ion-button
-          (click)="reset()"
-          size="small"
-          expand="full" shape="round" color="medium"  >
-          AC
-        </ion-button>
-      </ion-col>
-     <!-- le bouton (+/-) qui permet de changer le signe-->
-      <ion-col size="3">
-        <ion-button
-          (click)="changeSign('+/-')"
-          size="small"
-          expand="full" shape="round" color="medium"  
-          >
-          +/-
-        </ion-button>
-      </ion-col>
-     <!-- le bouton de la division-->
-      <ion-col size="3">
-        <ion-button
-          size="small"
-          expand="full" shape="round" color="medium"  >
-          %
-        </ion-button>
-      </ion-col>
-      <!--  le bouton de la division -->
-      <ion-col size="3">
-        <ion-button
-          (click)="clickOperator('/')"
-          size="small"
-          expand="full" shape="round" color="orange" >
-          /
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  <!-- la ligne 2 -->
-    <ion-row>
-    <!-- le bouton 7-->
-      <ion-col size="3">
-        <ion-button
-          (click)="clickNumber(7)"
-          size="small"
-          expand="full" shape="round" color="dark"  >7</ion-button>
-      </ion-col>
-      <!-- le bouton 8-->
-      <ion-col size="3">
-        <ion-button
-          (click)="clickNumber(8)"
-          size="small"
-          expand="full" shape="round" color="dark"  >
-          8
-        </ion-button>
 
-      </ion-col>
-      <!-- le bouton 9-->
-      <ion-col size="3">
-        <ion-button
-          (click)="clickNumber(9)"
-          size="small"
-          expand="full" shape="round" color="dark"  >
-          9
-        </ion-button>
-      </ion-col>
-      <!-- le bouton *-->
-      <ion-col size="3">
-        <ion-button
-          (click)="clickOperator('*')"
-          size="small"
-          expand="full" shape="round" color="orange" >
-          <ion-icon size="small" name="close"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  <!-- la ligne 3-->
-    <ion-row>
-    <!-- le bouton 4-->
-      <ion-col size="3">
-        <ion-button
-          (click)="clickNumber(4)"
-          size="small"
-          expand="full" shape="round" color="dark"  >
-          4
-        </ion-button>
-      </ion-col>
-      <!-- le bouton 5-->
-      <ion-col size="3">
-        <ion-button
-          (click)="clickNumber(5)"
-          size="small"
-          expand="full" shape="round" color="dark"  >
-          5
-        </ion-button>
-      </ion-col>
-      <!-- le bouton 6-->
-      <ion-col size="3">
-        <ion-button
-          (click)="clickNumber(6)"
-          size="small"
-          expand="full" shape="round" color="dark"  >
-          6
-        </ion-button>
-      </ion-col>
-      <ion-col size="3">
-        <ion-button
-          (click)="clickOperator('-')"
-          size="small"
-          expand="full" shape="round" color="orange" >
-          <ion-icon size="small" name="remove"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  <!--la ligne 4-->
-    <ion-row>
-    <!-- le bouton 1-->
-      <ion-col size="3">
-        <ion-button
-          (click)="clickNumber(1)"
-          size="small"
-          expand="full" shape="round" color="dark"  >
-          1
-        </ion-button>
-      </ion-col>
-      <ion-col size="3">
-        <ion-button
-          (click)="clickNumber(2)"
-          size="small"
-          expand="full" shape="round" color="dark"  >
-          2
-        </ion-button>
-        <!-- le bouton 3-->
-      </ion-col>
-      <ion-col size="3">
-        <ion-button
-          (click)="clickNumber(3)"
-          size="small"
-          expand="full" shape="round" color="dark"  >
-          3
-        </ion-button>
-      </ion-col>
-      <!-- le bouton +-->
-      <ion-col size="3">
-        <ion-button
-          (click)="clickOperator('+')"
-          size="small"
-          expand="full" shape="round" color="orange" >
-          <ion-icon size="small" name="add"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-    <!-- la ligne 5-->
-    <ion-row>
-
-     <!-- le bouton 0-->
-      <ion-col size="6">
-        <ion-button
-          (click)="clickNumber(0)"
-          size="small"
-          expand="full" shape="round" color="dark"  >
-          0
-        </ion-button>
-      </ion-col>
-      <!-- le bouton (,)-->
-      <ion-col size="3">
-        <ion-button
-          (click)="setDecimal()"
-          size="small"
-          expand="full" shape="round" color="dark"  >
-          ,
-        </ion-button>
-      </ion-col>
-      <!-- le bouton  = (resultat)-->
-      <ion-col size="3">
-        <ion-button
-          (click)="calculate()"
-          size="small"
-          expand="full" shape="round" color="orange" >
-          =
-        </ion-button>
-      </ion-col>
-    </ion-row>
+<!-- le contenu de la page--> 
+<ion-content color="dark">
+  <ion-item>
+    <ion-label class="display" color="dark">
+      {{ display }}
+    </ion-label>
+  </ion-item>
   
-  
-  
+  <ion-grid>
+    <ion-row *ngFor="let ligneMatrice of Matrice" justify-content-start>
+      <ion-col col-12 >
+       <ion-button *ngFor="let num of ligneMatrice" (click)="fonctionCalculatrice(num)"
+         color="danger">{{num}}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>
 <!--fin du contenu-->
